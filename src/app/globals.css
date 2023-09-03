@@ -16,12 +16,24 @@
   }
 }
 
+/* styles.css (or your stylesheet) */
+.parallax {
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  transition: transform 0.5s ease-out;
+}
+
+.parallax:hover {
+  transform: translate3d(0, -20%, 0); /* Adjust the parallax effect by changing the translation value */
+}
+
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  /*background: linear-gradient(*/
+  /*    to bottom,*/
+  /*    transparent,*/
+  /*    rgb(var(--background-end-rgb))*/
+  /*  )*/
+  /*  rgb(var(--background-start-rgb));*/
 }
