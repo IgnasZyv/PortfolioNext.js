@@ -16,13 +16,6 @@
   }
 }
 
-/* styles.css (or your stylesheet) */
-.parallax {
-  transform: translate3d(0, 0, 0);
-  will-change: transform;
-  transition: transform 0.5s ease-out;
-}
-
 body {
   color: rgb(var(--foreground-rgb));
   overflow-x: hidden;
@@ -31,16 +24,4 @@ body {
   z-index: -10;
 }
 
-.breathe {
-  animation: breathe 2s infinite alternate;
-}
-
-@keyframes breathe {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-10px);
-  }
-}
 

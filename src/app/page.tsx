@@ -4,6 +4,9 @@ import Image from "next/image";
 import Navigation from "@/app/components/Navigation";
 
 import { motion } from "framer-motion"
+import CardSection from "@/app/components/CardSection";
+import SkillCard from "@/app/components/SkillCard";
+import AboutMe from "@/app/components/sections/AboutMe";
 
 
 export default function Home() {
@@ -20,18 +23,17 @@ export default function Home() {
           {/* Hero Section */}
           <section className="">
               <Hero />
-
           </section>
 
           {/* About Me Section */}
-          <section className="relative">
+          <section className="relative my-10">
               {/* About Me Content */}
               <div className="z-10">
                   <AboutMe />
               </div>
 
               {/* About Me Waves (Background) */}
-              <div className="absolute w-screen z-0 bottom-0"
+              <div className="absolute w-screen -bottom-10"
               style={{zIndex: -1}}>
                   <Image
                       src={"/about-me-waves.svg"}
@@ -43,24 +45,4 @@ export default function Home() {
           </section>
       </main>
   )
-
-
-
-}
-
-
-function AboutMe() {
-    return(
-        <>
-            <div className={"rounded-3xl bg-neutral-700 bg-opacity-90 border border-pink-700 shadow-md shadow-pink-700 mx-auto"}
-                 style={{
-                     height: '60vh',
-                     width: '80%',
-                 }}
-            >
-
-
-            </div>
-        </>
-    )
 }

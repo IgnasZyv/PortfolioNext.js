@@ -1,9 +1,7 @@
 "use client"
 import Image from "next/image";
 import BreathingArrow from "@/app/components/BreathingArrow";
-
 import { motion } from "framer-motion"
-import WaveSvg from "@/app/components/WaveSvg";
 import FloatingComponent from "@/app/components/FloatingComponent";
 
 export default function Hero() {
@@ -21,26 +19,19 @@ export default function Hero() {
                     <HeroText />
                 </div>
 
-                <div className={"mt-auto"}>
+                <div className={"self-end ml-0"} style={{ marginLeft: 0 }}>
                     <BreathingArrow />
                 </div>
-                <div className={"-mb-52"}>
-                    <FloatingComponent>
+                <div className={"-mb-52 "}>
                         <Image
                             src={"/hero-image.svg"}
                             alt={"programmer illustration"}
                             width={400}
                             height={400}
                         />
-                    </FloatingComponent>
-
                 </div>
             </div>
-
-
         </motion.div>
-
-
     )
 }
 
