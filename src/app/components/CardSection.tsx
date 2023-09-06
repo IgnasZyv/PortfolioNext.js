@@ -1,23 +1,32 @@
 "use client"
-import {ReactNode} from "react";
-import {motion} from "framer-motion";
+import {ReactNode, useEffect, useState} from "react";
+import {motion, useAnimation} from "framer-motion";
 
-interface CardSectionProps { children: ReactNode }
+interface CardSectionProps {
+    direction: string,
+    children: ReactNode
+}
 
-
-export default function CardSection({ children }: CardSectionProps) {
+export default function CardSection({ direction, children }: CardSectionProps) {
+    const adjustedX = direction === "left" ? "-500" : "500"
 
     return (
-        <section
-            className={
-                "rounded-3xl bg-neutral-700 bg-opacity-90 border border-pink-700 shadow-md shadow-pink-700 mx-auto p-10"
-            }
-            style={{
-                height: "fit-content",
-                width: "80%",
-            }}
+        <motion.div initial={{ opacity: 0, x: adjustedX }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
         >
-            {children}
-        </section>
+            <section
+                className={
+                    "rounded-3xl bg-neutral-700 bg-opacity-90 border border-pink-700 shadow-md shadow-pink-700 mx-auto p-10"
+                }
+                style={{
+                    width: "80%",
+                }}
+            >
+                {children}
+            </section>
+        </motion.div>
+
     );
 }
