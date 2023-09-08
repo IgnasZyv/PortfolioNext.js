@@ -7,6 +7,7 @@ import { motion } from "framer-motion"
 import CardSection from "@/app/components/CardSection";
 import SkillCard from "@/app/components/SkillCard";
 import AboutMe from "@/app/components/sections/AboutMe";
+import Projects from "@/app/components/sections/Projects";
 
 
 export default function Home() {
@@ -14,19 +15,17 @@ export default function Home() {
       <main className="">
           {/* Background Wave */}
           <div className="absolute w-screen" style={{zIndex: -1}}>
-              <Image src={"/wave-haikei.svg"} alt={"Wave"} width={2000} height={600} />
+              <Image src={"/wave-haikei.svg"} alt={"Wave"} width={2000} height={600} priority={true} />
           </div>
 
           {/* Navigation */}
           <Navigation />
 
           {/* Hero Section */}
-          <section className="">
-              <Hero />
-          </section>
+          <Hero />
 
           {/* About Me Section */}
-          <section className="relative my-10">
+          <div className="relative my-10">
               {/* About Me Content */}
               <div className="z-10">
                   <AboutMe />
@@ -42,7 +41,11 @@ export default function Home() {
                       height={500}
                   />
               </div>
-          </section>
+          </div>
+
+          <Projects/>
+
+
       </main>
   )
 }

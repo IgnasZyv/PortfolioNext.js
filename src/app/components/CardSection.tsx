@@ -13,7 +13,7 @@ export default function CardSection({ direction, children }: CardSectionProps) {
     return (
         <motion.div initial={{ opacity: 0, x: adjustedX }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{  }}
                     transition={{ duration: 0.5 }}
         >
             <section
