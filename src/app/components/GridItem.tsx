@@ -9,7 +9,7 @@ interface GridItemProps {
     backgroundSrc: string,
     title: string,
     description: string,
-    images: Array<string>,
+
 }
 
 export default function GridItem({ backgroundSrc, title, description, }: GridItemProps) {
@@ -42,37 +42,36 @@ export default function GridItem({ backgroundSrc, title, description, }: GridIte
                 // onClick={handleCardClick}
                 className="rounded-2xl"
             >
-                <div className="relative aspect-video rounded-3xl">
-                    <div className="absolute inset-0">
-                        <Image src={backgroundSrc} alt="test" fill objectFit="cover" className={"rounded-3xl"} />
+                <div className="relative aspect-square rounded-3xl">
+                    <div className="absolute inset-0 rounded-3xl">
+                        <Image src={backgroundSrc} alt="test" fill objectFit={"contain"}  quality={100} className={"rounded-3xl opacity-90 "} />
                     </div>
                     <div
-                        className="absolute inset-0 flex flex-col justify-start
-                         text-white text-center bg-black bg-opacity-60 rounded-3xl
-                         
+                        className="absolute inset-0 flex flex-col justify-center
+                         text-white text-center bg-neutral-800 bg-opacity-30 rounded-3xl
+                         shadow-xl shadow-neutral-800
                          "
                     >
-                        {!isHovered ? (
-                            <motion.div
-                                key="default"
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <DefaultItem title={title}/>
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                key="hovered"
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <HoveredItem src={backgroundSrc} title={title} description={description} onClick={handleCardClick}/>
-                            </motion.div>
-                        )}
+                            {!isHovered ? (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.4 }}
+                                >
+                                    <DefaultItem title={title}/>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.4 }}
+                                >
+                                    <HoveredItem src={backgroundSrc} title={title} description={description} onClick={handleCardClick}/>
+                                </motion.div>
+                            )}
+
                     </div>
                 </div>
             </motion.div>
@@ -84,8 +83,7 @@ export default function GridItem({ backgroundSrc, title, description, }: GridIte
 function HoveredItem({ src, title, description, onClick }: { src: string, title: string, description: string, onClick: any }) {
     return (
         <>
-            <div className="absolute inset-0 flex justify-around bg-neutral-700 bg-opacity-90 p-4 rounded-3xl border border-teal-400">
-                <Image src={src} alt={"name"} height={100} width={120} quality={100} />
+            <div className="absolute inset-0  flex justify-around bg-neutral-700 bg-opacity-90 p-5 rounded-3xl border-2 border-pink-600">
                 <div className={"flex-col justify-center items-center my-auto"}>
                     <h2 className={"text-center mx-auto m-5"}>{title}</h2>
                     <p className={"text-center mx-auto"}>{description}</p>
@@ -101,7 +99,7 @@ function HoveredItem({ src, title, description, onClick }: { src: string, title:
 function DefaultItem({ title }: { title: string}) {
     return (
         <>
-            <h1 className="text-sm sm:text-xl m-5">{title}</h1>
+            <h1 className="text-sm sm:text-xl m-5 p-2 bg-neutral-800 bg-opacity-90 w-fit rounded mx-auto">{title}</h1>
         </>
     )
 }
