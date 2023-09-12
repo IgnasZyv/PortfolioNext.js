@@ -1,20 +1,52 @@
 "use client"
 import Image from "next/image";
-import {AnimatePresence, motion} from "framer-motion";
-import {useState} from "react";
-import ProjectOverlay from "@/app/components/ProjectOverlay";
-import {func} from "prop-types";
+import {animate, AnimatePresence, motion} from "framer-motion";
+import {MouseEventHandler, useEffect, useRef, useState} from "react";
+
 
 interface GridItemProps {
+    id: number,
     backgroundSrc: string,
     title: string,
     description: string,
-
+    onOpenOverlay: any,
 }
 
-export default function GridItem({ backgroundSrc, title, description, }: GridItemProps) {
+export default function GridItem({ id, backgroundSrc, title, description, onOpenOverlay}: GridItemProps) {
     const [isHovered, setIsHovered] = useState(false);
-    const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
+    const componentRef = useRef<HTMLDivElement | null>(null); // Explicitly specify the type
+
+    const isMobile = () => {
+        return "ontouchstart" in window
+    }
+
+    useEffect(() => {
+        const handleClickOutside = (event: any) => {
+            if (componentRef.current && !componentRef.current.contains(event.target)) {
+                if (isMobile()) {
+                    setIsHovered(false);
+                    setIsClicked(false)
+                }
+            }
+        }
+
+        document.addEventListener("click", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        }
+    }, []);
+
+
+    const handleMobileClick = () => {
+        // Toggle the clicked state for this component
+        if (isMobile()) {
+            setIsClicked(!isClicked);
+            console.log(isClicked);
+        }
+
+    };
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -24,22 +56,21 @@ export default function GridItem({ backgroundSrc, title, description, }: GridIte
         setIsHovered(false);
     };
 
-    const handleCardClick = () => {
-        setIsOverlayOpen(true);
-    };
+    const handleClick = () => {
+        setIsHovered(!isHovered)
+    }
 
-    const handleCloseOverlay = () => {
-        setIsOverlayOpen(false);
-    };
+
+
 
     return (
-        <div>
+        <div ref={componentRef}>
             <motion.div
                 initial={{ scale: 0.9 }}
                 whileHover={{ scale: 1 }}
+                animate={{ scale: !isClicked ? 0.9 : 1}}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                // onClick={handleCardClick}
                 className="rounded-2xl"
             >
                 <div className="relative aspect-square rounded-3xl">
@@ -52,42 +83,55 @@ export default function GridItem({ backgroundSrc, title, description, }: GridIte
                          shadow-xl shadow-neutral-800
                          "
                     >
-                            {!isHovered ? (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ duration: 0.4 }}
-                                >
-                                    <DefaultItem title={title}/>
-                                </motion.div>
+                        {/*<motion.div*/}
+                        {/*    initial={{ opacity: 0.4 }}*/}
+                        {/*    whileHover={{ opacity: 1 }}*/}
+                        {/*    whileTap={{ opacity: 1 }} // Adjust the scale for a subtle animation*/}
+                        {/*>*/}
+                        {/*    {!isHovered ? (*/}
+                        {/*        <DefaultItem title={title} />*/}
+                        {/*    ) : (*/}
+                        {/*        <HoveredItem id={id} src={backgroundSrc} title={title} description={description} onClick={onOpenOverlay} />*/}
+                        {/*    )}*/}
+                        {/*</motion.div>*/}
+
+
+                        <motion.div
+                            initial={{ opacity: 0.4 }}
+                            whileHover={{ opacity: 1 }}
+                            animate={{ opacity: !isClicked ? 0.4 : 1 }}
+                            transition={{ duration: 0.3 }}
+                            onClick={handleMobileClick}
+                        >
+                            {!isHovered || !isClicked ? (
+                                <DefaultItem title={title} />
                             ) : (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ duration: 0.4 }}
-                                >
-                                    <HoveredItem src={backgroundSrc} title={title} description={description} onClick={handleCardClick}/>
-                                </motion.div>
+                                <HoveredItem
+                                    id={id}
+                                    src={backgroundSrc}
+                                    title={title}
+                                    description={description}
+                                    onClick={onOpenOverlay}
+                                />
                             )}
+                        </motion.div>
+
 
                     </div>
                 </div>
             </motion.div>
-            {isOverlayOpen && <ProjectOverlay onClose={handleCloseOverlay} />}
         </div>
     )
 }
 
-function HoveredItem({ src, title, description, onClick }: { src: string, title: string, description: string, onClick: any }) {
+function HoveredItem({ id, src, title, description, onClick }: { id: number, src: string, title: string, description: string, onClick: any }) {
     return (
         <>
             <div className="absolute inset-0  flex justify-around bg-neutral-700 bg-opacity-90 p-5 rounded-3xl border-2 border-pink-600">
                 <div className={"flex-col justify-center items-center my-auto"}>
                     <h2 className={"text-center mx-auto m-5"}>{title}</h2>
                     <p className={"text-center mx-auto"}>{description}</p>
-                    <button className={"bg-pink-700 p-2 rounded-full mt-10"} onClick={onClick}>Click for more information!</button>
+                    <button className={"bg-pink-700 p-2 rounded-full mt-10"} onClick={() => onClick(id)}>Click for more information!</button>
                 </div>
 
 
