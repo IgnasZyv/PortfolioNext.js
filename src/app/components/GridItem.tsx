@@ -8,11 +8,11 @@ interface GridItemProps {
     id: number,
     backgroundSrc: string,
     title: string,
-    description: string,
+    shortDescription: string,
     onOpenOverlay: any,
 }
 
-export default function GridItem({ id, backgroundSrc, title, description, onOpenOverlay}: GridItemProps) {
+export default function GridItem({ id, backgroundSrc, title, shortDescription, onOpenOverlay}: GridItemProps) {
     const [isHovered, setIsHovered] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
     const componentRef = useRef<HTMLDivElement | null>(null); // Explicitly specify the type
@@ -24,10 +24,10 @@ export default function GridItem({ id, backgroundSrc, title, description, onOpen
     useEffect(() => {
         const handleClickOutside = (event: any) => {
             if (componentRef.current && !componentRef.current.contains(event.target)) {
-                if (isMobile()) {
+
                     setIsHovered(false);
                     setIsClicked(false)
-                }
+
             }
         }
 
@@ -43,7 +43,8 @@ export default function GridItem({ id, backgroundSrc, title, description, onOpen
         // Toggle the clicked state for this component
         if (isMobile()) {
             setIsClicked(!isClicked);
-            console.log(isClicked);
+            setIsHovered(!isHovered)
+            console.log("clicked!" + isClicked);
         }
 
     };
@@ -61,17 +62,18 @@ export default function GridItem({ id, backgroundSrc, title, description, onOpen
     }
 
 
-
-
     return (
         <div ref={componentRef}>
             <motion.div
                 initial={{ scale: 0.9 }}
                 whileHover={{ scale: 1 }}
                 animate={{ scale: !isClicked ? 0.9 : 1}}
+                transition={{ duration: 0.3 }}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 className="rounded-2xl"
+                onClick={handleMobileClick}
+
             >
                 <div className="relative aspect-square rounded-3xl">
                     <div className="absolute inset-0 rounded-3xl">
@@ -101,16 +103,19 @@ export default function GridItem({ id, backgroundSrc, title, description, onOpen
                             whileHover={{ opacity: 1 }}
                             animate={{ opacity: !isClicked ? 0.4 : 1 }}
                             transition={{ duration: 0.3 }}
-                            onClick={handleMobileClick}
+                            onClick={(event: any) => {
+                                event.stopPropagation()
+                                handleMobileClick()
+                            }}
                         >
-                            {!isHovered || !isClicked ? (
+                            {!isHovered ? (
                                 <DefaultItem title={title} />
                             ) : (
                                 <HoveredItem
                                     id={id}
                                     src={backgroundSrc}
                                     title={title}
-                                    description={description}
+                                    description={shortDescription}
                                     onClick={onOpenOverlay}
                                 />
                             )}
@@ -129,9 +134,13 @@ function HoveredItem({ id, src, title, description, onClick }: { id: number, src
         <>
             <div className="absolute inset-0  flex justify-around bg-neutral-700 bg-opacity-90 p-5 rounded-3xl border-2 border-pink-600">
                 <div className={"flex-col justify-center items-center my-auto"}>
-                    <h2 className={"text-center mx-auto m-5"}>{title}</h2>
+                    <h2 className={"text-center mx-auto md:m-5 text-sm sm:text-md lg:text-xl font-bold"}>{title}</h2>
                     <p className={"text-center mx-auto"}>{description}</p>
-                    <button className={"bg-pink-700 p-2 rounded-full mt-10"} onClick={() => onClick(id)}>Click for more information!</button>
+                    <button className={"bg-pink-700 p-2 rounded-full mt-10 text-white text-xs sm:text-md lg:text-xl"}
+                            onClick={() => onClick(id)}
+                    >
+                        Click for more information!
+                    </button>
                 </div>
 
 
@@ -140,10 +149,10 @@ function HoveredItem({ id, src, title, description, onClick }: { id: number, src
     )
 }
 
-function DefaultItem({ title }: { title: string}) {
+function DefaultItem({ title }: { title: string, }) {
     return (
         <>
-            <h1 className="text-sm sm:text-xl m-5 p-2 bg-neutral-800 bg-opacity-90 w-fit rounded mx-auto">{title}</h1>
+            <h1 className="text-sm sm:text-2xl m-5 p-2 bg-neutral-800 bg-opacity-90 w-fit rounded mx-auto">{title}</h1>
         </>
     )
 }

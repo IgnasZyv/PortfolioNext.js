@@ -39,11 +39,11 @@ const ProjectOverlay = ({ project, onClose }: ProjectOverlayProps) => {
 
 
     return (
-        <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50 text-neutral-800">
             <div className="bg-white p-8 rounded-lg">
                 {/* Add detailed project information here */}
                 <h2>{title}</h2>
-                <p>{description}</p>
+                <p className={"w-fit"}>{description}</p>
                 <button onClick={onClose}>Close</button>
             </div>
         </div>
