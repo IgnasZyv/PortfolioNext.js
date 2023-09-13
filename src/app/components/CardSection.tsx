@@ -8,7 +8,7 @@ interface CardSectionProps {
 }
 
 export default function CardSection({ direction, children }: CardSectionProps) {
-    const adjustedX = direction === "left" ? "-500" : "500"
+    const adjustedX = direction === "left" ? "-300" : "300"
 
     return (
         <motion.div initial={{ opacity: 0, x: adjustedX }}

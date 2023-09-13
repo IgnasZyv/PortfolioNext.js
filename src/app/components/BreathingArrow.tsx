@@ -6,7 +6,7 @@ const BreathingArrow = () => {
         <FloatingComponent>
             <div className={"mr-0"}>
                 <Image
-                    src="/down-arrow.svg"
+                    src="/arrows/down-arrow.svg"
                     alt="Arrow Down"
                     width={40}
                     height={40}

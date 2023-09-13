@@ -10,8 +10,6 @@ import ProjectOverlay from "@/app/components/ProjectOverlay";
 import {id} from "postcss-selector-parser";
 import {set} from "zod";
 
-
-
 export default function Projects() {
     const [isOverlayOpen, setIsOverlayOpen] = useState(false);
     const [id, setId] = useState(0);
@@ -25,7 +23,6 @@ export default function Projects() {
         initial: { opacity: 0, y: -50 },
         whileInView: { opacity: 1, y: 0, transition: { duration: 0.8 } }
     }
-
 
     const handleCardClick = (projectId: number) => {
         console.log(projectId)
@@ -62,12 +59,12 @@ export default function Projects() {
                             </motion.div>
                         ))}
 
-
                     </motion.div>
 
                     {isOverlayOpen && (
                         <ProjectOverlay project={FindProjectById(id)} onClose={handleCloseOverlay} />
                     )}
+
                     <div className={"my-10"}>test</div>
                     <div className={"my-10"}>test</div>
                     <div className={"my-10"}>test</div>
@@ -79,7 +76,6 @@ export default function Projects() {
                     <div className={"my-10"}>test</div>
                     <div className={"my-10"}>test</div>
                 </div>
-
 
             </CardSection>
         </div>

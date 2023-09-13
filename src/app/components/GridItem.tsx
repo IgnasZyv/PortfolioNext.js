@@ -12,6 +12,14 @@ interface GridItemProps {
     onOpenOverlay: any,
 }
 
+const variantValues = {
+    initialScale: { scale: 0.9 },
+    animatedScale: { scale: 1 },
+    transitionDuration: { duration: 0.3 },
+    initialOpacity: { opacity: 0.4 },
+    animatedOpacity: { opacity: 1 },
+}
+
 export default function GridItem({ id, backgroundSrc, title, shortDescription, onOpenOverlay}: GridItemProps) {
     const [isHovered, setIsHovered] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
@@ -24,10 +32,10 @@ export default function GridItem({ id, backgroundSrc, title, shortDescription, o
     useEffect(() => {
         const handleClickOutside = (event: any) => {
             if (componentRef.current && !componentRef.current.contains(event.target)) {
-
+                if (isMobile()) {
                     setIsHovered(false);
                     setIsClicked(false)
-
+                }
             }
         }
 
@@ -61,14 +69,13 @@ export default function GridItem({ id, backgroundSrc, title, shortDescription, o
         setIsHovered(!isHovered)
     }
 
-
     return (
         <div ref={componentRef}>
             <motion.div
-                initial={{ scale: 0.9 }}
-                whileHover={{ scale: 1 }}
-                animate={{ scale: !isClicked ? 0.9 : 1}}
-                transition={{ duration: 0.3 }}
+                // initial={ variantValues.initialScale }
+                whileHover={ variantValues.initialScale }
+                animate={ !isClicked ? variantValues.initialScale : variantValues.animatedScale }
+                transition={ variantValues.transitionDuration }
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 className="rounded-2xl"
@@ -76,8 +83,14 @@ export default function GridItem({ id, backgroundSrc, title, shortDescription, o
 
             >
                 <div className="relative aspect-square rounded-3xl">
-                    <div className="absolute inset-0 rounded-3xl">
-                        <Image src={backgroundSrc} alt="test" fill objectFit={"contain"}  quality={100} className={"rounded-3xl opacity-90 "} />
+                    <div className="absolute inset-0 rounded-3xl overflow-hidden">
+                        <Image
+                            src={backgroundSrc} alt="test"
+                            fill={true}
+                            quality={100}
+                            className={"rounded-3xl opacity-90 object-cover "}
+                            sizes={"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
+                        />
                     </div>
                     <div
                         className="absolute inset-0 flex flex-col justify-center
@@ -85,24 +98,11 @@ export default function GridItem({ id, backgroundSrc, title, shortDescription, o
                          shadow-xl shadow-neutral-800
                          "
                     >
-                        {/*<motion.div*/}
-                        {/*    initial={{ opacity: 0.4 }}*/}
-                        {/*    whileHover={{ opacity: 1 }}*/}
-                        {/*    whileTap={{ opacity: 1 }} // Adjust the scale for a subtle animation*/}
-                        {/*>*/}
-                        {/*    {!isHovered ? (*/}
-                        {/*        <DefaultItem title={title} />*/}
-                        {/*    ) : (*/}
-                        {/*        <HoveredItem id={id} src={backgroundSrc} title={title} description={description} onClick={onOpenOverlay} />*/}
-                        {/*    )}*/}
-                        {/*</motion.div>*/}
-
-
                         <motion.div
-                            initial={{ opacity: 0.4 }}
-                            whileHover={{ opacity: 1 }}
-                            animate={{ opacity: !isClicked ? 0.4 : 1 }}
-                            transition={{ duration: 0.3 }}
+                            initial={ variantValues.initialOpacity }
+                            whileHover={ variantValues.animatedOpacity }
+                            animate={ !isClicked ? variantValues.initialOpacity : variantValues.animatedOpacity }
+                            transition={ variantValues.transitionDuration }
                             onClick={(event: any) => {
                                 event.stopPropagation()
                                 handleMobileClick()
@@ -115,13 +115,11 @@ export default function GridItem({ id, backgroundSrc, title, shortDescription, o
                                     id={id}
                                     src={backgroundSrc}
                                     title={title}
-                                    description={shortDescription}
+                                    shortDescription={shortDescription}
                                     onClick={onOpenOverlay}
                                 />
                             )}
                         </motion.div>
-
-
                     </div>
                 </div>
             </motion.div>
@@ -129,20 +127,19 @@ export default function GridItem({ id, backgroundSrc, title, shortDescription, o
     )
 }
 
-function HoveredItem({ id, src, title, description, onClick }: { id: number, src: string, title: string, description: string, onClick: any }) {
+function HoveredItem({ id, src, title, shortDescription, onClick }: { id: number, src: string, title: string, shortDescription: string, onClick: any }) {
     return (
         <>
             <div className="absolute inset-0  flex justify-around bg-neutral-700 bg-opacity-90 p-5 rounded-3xl border-2 border-pink-600">
                 <div className={"flex-col justify-center items-center my-auto"}>
                     <h2 className={"text-center mx-auto md:m-5 text-sm sm:text-md lg:text-xl font-bold"}>{title}</h2>
-                    <p className={"text-center mx-auto"}>{description}</p>
+                    <p className={"text-center mx-auto"}>{shortDescription}</p>
                     <button className={"bg-pink-700 p-2 rounded-full mt-10 text-white text-xs sm:text-md lg:text-xl"}
                             onClick={() => onClick(id)}
                     >
                         Click for more information!
                     </button>
                 </div>
-
 
             </div>
         </>
